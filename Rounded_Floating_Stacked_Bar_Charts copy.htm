@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)https://www.chartjs.org/samples/latest/charts/bar/multi-axis.html -->
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Floating Stacked Bar Charts</title>
+	<script src="https://www.chartjs.org/dist/2.9.4/Chart.min.js"></script>
+	<script src="./roundedChart.js"></script>
+
+	<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+	<style>
+		canvas {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+	</style>
+	<style type="text/css">
+		/* Chart.js */
+		@keyframes chartjs-render-animation {
+			from {
+				opacity: .99
+			}
+
+			to {
+				opacity: 1
+			}
+		}
+
+		.chartjs-render-monitor {
+			animation: chartjs-render-animation 1ms
+		}
+
+		.chartjs-size-monitor,
+		.chartjs-size-monitor-expand,
+		.chartjs-size-monitor-shrink {
+			position: absolute;
+			direction: ltr;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			overflow: hidden;
+			pointer-events: none;
+			visibility: hidden;
+			z-index: -1
+		}
+
+		.chartjs-size-monitor-expand>div {
+			position: absolute;
+			width: 1000000px;
+			height: 1000000px;
+			left: 0;
+			top: 0
+		}
+
+		.chartjs-size-monitor-shrink>div {
+			position: absolute;
+			width: 200%;
+			height: 200%;
+			left: 0;
+			top: 0
+		}
+	</style>
+</head>
+
+<body data-new-gr-c-s-check-loaded="14.993.0" data-gr-ext-installed="">
+	<div style="width: 75%">
+		<div class="chartjs-size-monitor">
+			<div class="chartjs-size-monitor-expand">
+				<div class=""></div>
+			</div>
+			<div class="chartjs-size-monitor-shrink">
+				<div class=""></div>
+			</div>
+		</div>
+		<canvas id="canvas" style="display: block; height: 340px; width: 680px;" width="1360" height="680"
+			class="chartjs-render-monitor"></canvas>
+	</div>
+	<script>
+		var barChartData = {
+			labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+			datasets: [
+				{
+					label: 'Dataset 1',
+					backgroundColor: window.chartColors.grey,
+					yAxisID: 'y-axis-2',
+					data: [
+						[0, 12], // (floating-bars)
+						[0, 13]
+					]
+				}, 
+				{
+					label: 'Dataset 2',
+					backgroundColor: window.chartColors.red,
+					yAxisID: 'y-axis-2',
+					data: [
+						[0, -9], // (floating-bars)
+						[0, -19]
+					]
+
+				}
+			]
+
+		};
+
+		var chartColors = {
+			red: 'rgb(255, 99, 132)',
+			orange: 'rgb(255, 159, 64)',
+			yellow: 'rgb(255, 205, 86)',
+			green: 'rgb(75, 192, 192)',
+			blue: 'rgb(54, 162, 235)',
+			purple: 'rgb(153, 102, 255)',
+			grey: 'rgb(231,233,237)'
+		};
+
+		var randomScalingFactor = function () {
+			return (Math.random() > 0.5 ? 1.0 : 1.0) * Math.round(Math.random() * 100);
+		};
+
+		window.onload = function () {
+			// var ctx = document.getElementById("canvas").getContext("2d");
+			// var myBar = new Chart(ctx, {
+			// 	type: 'roundedBar',
+			// 	data: {
+			// 		labels: ["Car", "Bike", "Walking"],
+			// 		datasets: [{
+			// 			label: 'Students',
+			// 			backgroundColor: chartColors.blue,
+			// 			data: [
+			// 				randomScalingFactor(),
+			// 				randomScalingFactor(),
+			// 				randomScalingFactor(),
+			// 			]
+			// 		}, {
+			// 			label: 'Teachers',
+			// 			backgroundColor: chartColors.red,
+			// 			data: [
+			// 				randomScalingFactor(),
+			// 				randomScalingFactor(),
+			// 				randomScalingFactor(),
+			// 			]
+			// 		}, {
+			// 			label: 'Visitors',
+			// 			backgroundColor: chartColors.green,
+			// 			data: [
+			// 				randomScalingFactor(),
+			// 				randomScalingFactor(),
+			// 				randomScalingFactor(),
+			// 			]
+			// 		}]
+			// 	},
+			// 	options: {
+			// 		responsive: true,
+			// 		barRoundness: 1,
+			// 		title: {
+			// 			display: true,
+			// 			text: "Chart.js - Bar Chart with Rounded Tops (drawRoundedTopRectangle Method)"
+			// 		},
+			// 		elements: {
+			// 			rectangle: {
+			// 				barThickness: 12,
+			// 			},
+			// 		},
+			// 	}
+			// });
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myBar = new Chart(ctx, {
+				type: 'roundedBar',
+				data: barChartData,
+				options: {
+					barRoundness: 1,
+					responsive: true,
+					title: {
+						display: true,
+						text: 'Floating Stacked Bar Charts with'
+					},
+					tooltips: {
+						mode: 'index',
+						intersect: true // check 
+					},
+					scales: {
+						xAxes: [{
+							stacked: true,
+							gridLines: {
+								drawOnChartArea: false
+							},
+						}],
+						yAxes: [{
+							type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+							display: true,
+							position: 'right',
+							id: 'y-axis-2',
+							gridLines: {
+								drawOnChartArea: true
+							},
+							ticks: {
+								beginAtZero: true
+							}
+						}],
+					}, elements: {
+						rectangle: {
+							barThickness: 12,
+						},
+					},
+				}
+			});
+
+		};
+	</script>
+
+
+
+</body>
+
+</html>
