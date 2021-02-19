@@ -19,3 +19,7 @@ This Repo contains sample code for chart js
 
 ![alt text](https://github.com/NahlaEssam/chartJsSamples/blob/main/imgs/rounded%20bar%20charts.png )
 
+## Bar Funnel Chart 
+
+![alt text](https://github.com/NahlaEssam/chartJsSamples/blob/main/imgs/bar_funnel.png )
+
