@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)https://www.chartjs.org/samples/latest/charts/bar/multi-axis.html -->
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Area Funnel Charts</title>
+	<script src="https://www.chartjs.org/dist/2.9.4/Chart.min.js"></script>
+
+	<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+	<script src="./funnel-1.js"></script>
+	<style>
+		canvas {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+	</style>
+	<style type="text/css">
+		/* Chart.js */
+		@keyframes chartjs-render-animation {
+			from {
+				opacity: .99
+			}
+
+			to {
+				opacity: 1
+			}
+		}
+
+		.chartjs-render-monitor {
+			animation: chartjs-render-animation 1ms
+		}
+
+		.chartjs-size-monitor,
+		.chartjs-size-monitor-expand,
+		.chartjs-size-monitor-shrink {
+			position: absolute;
+			direction: ltr;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			overflow: hidden;
+			pointer-events: none;
+			visibility: hidden;
+			z-index: -1
+		}
+
+		.chartjs-size-monitor-expand>div {
+			position: absolute;
+			width: 1000000px;
+			height: 1000000px;
+			left: 0;
+			top: 0
+		}
+
+		.chartjs-size-monitor-shrink>div {
+			position: absolute;
+			width: 200%;
+			height: 200%;
+			left: 0;
+			top: 0
+		}
+	</style>
+</head>
+
+<body>
+	<div style="width:75%;">
+		<canvas id="canvas"></canvas>
+	</div>
+	<br>
+	<br>
+	<script>
+		var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		var config = {
+			type: 'funnel',
+			data: {
+				labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+				datasets: [
+					{
+						label: 'Min',
+						borderColor: '#408DBF',
+						backgroundColor: '#408DBF',
+						pointRadius: 0,
+						fill: false,
+						data: [
+							{ x: 0, y: 30 },
+							{ x: 1, y: 29 },
+							{ x: 2, y: 29.2 },
+							{ x: 3, y: 27 },
+							{ x: 4, y: 26.5 },
+							{ x: 5, y: 25 },
+
+						],
+						stepLabel: true,
+					},
+					{
+						label: 'Max',
+						fill: '-1',
+
+						borderColor: '#408DBF',
+						backgroundColor: '#408DBF',
+						pointRadius: 0,
+						data: [
+							{ x: 0, y: -30 },
+							{ x: 1, y: -29 },
+							{ x: 2, y: -29.2 },
+							{ x: 3, y: -27 },
+							{ x: 4, y: -26.5 },
+							{ x: 5, y: -25 },
+
+						],
+					},
+					{
+						label: 'Min 1',
+						borderColor: '#9A9DDE',
+						backgroundColor: '#9A9DDE',
+						pointRadius: 0,
+						fill: false,
+						data: [
+							{ x: 5.1, y: 25 },
+							{ x: 6, y: 24 },
+							{ x: 7, y: 24.2 },
+							{ x: 8, y: 22 },
+							{ x: 9, y: 21.5 },
+							{ x: 10, y: 20 },
+
+						],
+						stepLabel: true,
+					},
+					{
+						label: 'Max 1',
+						fill: '-1',
+						borderColor: '#9A9DDE',
+						backgroundColor: '#9A9DDE',
+						pointRadius: 0,
+						data: [
+							{ x: 5.1, y: -25 },
+							{ x: 6, y: -24 },
+							{ x: 7, y: -24.2 },
+							{ x: 8, y: -22 },
+							{ x: 9, y: -21.5 },
+							{ x: 10, y: -20 },
+
+						],
+					},
+					{
+						label: 'Min 2',
+						borderColor: '#C784D7',
+						backgroundColor: '#C784D7',
+						pointRadius: 0,
+						fill: false,
+						data: [
+							{ x: 10.1, y: 20 },
+							{ x: 11, y: 19 },
+							{ x: 12, y: 19.2 },
+							{ x: 13, y: 17 },
+							{ x: 14, y: 16.5 },
+							{ x: 15, y: 15 },
+
+						],
+						stepLabel: true,
+					},
+					{
+						label: 'Max 2',
+						fill: '-1',
+						borderColor: '#C784D7',
+						backgroundColor: '#C784D7',
+						pointRadius: 0,
+						data: [
+							{ x: 10.1, y: -20 },
+							{ x: 11, y: -19 },
+							{ x: 12, y: -19.2 },
+							{ x: 13, y: -17 },
+							{ x: 14, y: -16.5 },
+							{ x: 15, y: -15 },
+
+						],
+					},
+					{
+						label: 'Min 3',
+						borderColor: '#D78487',
+						backgroundColor: '#D78487',
+						pointRadius: 0,
+						fill: false,
+						data: [
+							{ x: 15.1, y: 15 },
+							{ x: 16, y: 14 },
+							{ x: 17, y: 14.2 },
+							{ x: 18, y: 12 },
+							{ x: 19, y: 11.5 },
+							{ x: 20, y: 10 },
+
+						],
+						stepLabel: true,
+					},
+					{
+						label: 'Max 3',
+						fill: '-1',
+						borderColor: '#D78487',
+						backgroundColor: '#D78487',
+						pointRadius: 0,
+						data: [
+							{ x: 15.1, y: -15 },
+							{ x: 16, y: -14 },
+							{ x: 17, y: -14.2 },
+							{ x: 18, y: -12 },
+							{ x: 19, y: -11.5 },
+							{ x: 20, y: -10 },
+
+						],
+					}
+
+				]
+			},
+			
+			options: {
+				// maintainAspectRatio: false,
+				spanGaps: false,
+				legend: {
+					display: false
+				},
+				elements: {
+					// line: {
+					//     tension: 0.000001
+					// }
+				},
+				plugins: {
+					filler: {
+						propagate: false
+					}
+				},
+				scales: {
+					xAxes: [{
+						type: 'linear',
+						ticks: {
+							autoSkip: false,
+							beginAtZero: true,
+							callback: function (value, index, values) {
+								return '';
+							},	
+						},
+						gridLines: {
+							display: false,
+						},
+					}],
+					yAxes: [{
+
+						ticks: {
+							beginAtZero: true,
+							callback: function (value, index, values) {
+								return '';
+							},
+						},
+						gridLines: {
+							drawBorder: false,
+							drawOnChartArea: false,
+							display: false,
+						},
+					}]
+				},
+				events: []
+			}
+		};
+
+		window.onload = function () {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myLine = new Chart(ctx, config);
+		};
+		var colorNames = Object.keys(window.chartColors);
+	</script>
+</body>
+
+</html>
