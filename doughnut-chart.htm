@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Doughnut Chart</title>
+	<script src="https://www.chartjs.org/dist/2.9.4/Chart.min.js"></script>
+	<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+
+	<script src="./arch-doughnut.js"></script>
+	<style>
+		canvas {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="canvas-holder" >
+		<canvas id="chart-area"></canvas>
+	</div>
+	<!-- <button id="randomizeData">Randomize Data</button>
+	<button id="addDataset">Add Dataset</button>
+	<button id="removeDataset">Remove Dataset</button>
+	<button id="addData">Add Data</button>
+	<button id="removeData">Remove Data</button>
+	<button id="changeCircleSize">Semi/Full Circle</button> -->
+	<script>
+		var randomScalingFactor = function () {
+			return Math.round(Math.random() * 100);
+		};
+
+		var config = {
+			type: 'funnel',
+			data: {
+				datasets: [{
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'Dataset 1'
+				}],
+				labels: [
+					'Red Red Red Red Red Red Red Red Red Red Red Red Red Red Red Red Red ',
+					'Orange Orange Orange Orange Orange Orange Orange Orange Orange Orange ',
+					'Yellow',
+					'Green',
+					'Blue'
+				]
+			},
+			options: {
+				responsive: true,
+				elements: {
+					arc: {
+						total: {
+							display: true,
+							value: 400,
+							text: 'test 13',
+							fontSize: 25,
+							color: 'red'
+						}
+					}
+				},
+				legend: {
+					position: 'top',
+					onClick: (e, legendItem) => {
+						// overwrite chart.js getDatasetMeta functionality , 
+						var getDatasetMeta = function (scope, datasetIndex) {
+							var me = scope;
+							var dataset = me.data.datasets[datasetIndex];
+							if (dataset === undefined) {
+								dataset = {}
+							}
+							if (!dataset._meta) {
+								dataset._meta = {};
+							}
+
+							var meta = dataset._meta[me.id];
+							if (!meta) {
+								meta = dataset._meta[me.id] = {
+									type: null,
+									data: [],
+									dataset: null,
+									controller: null,
+									hidden: null,			// See isDatasetVisible() comment
+									xAxisID: null,
+									yAxisID: null,
+									order: dataset.order || 0,
+									index: datasetIndex
+								};
+							}
+
+							return meta;
+						}
+						
+						// set the active operator and the added or removed legend value
+						var value = window.myDoughnut.config.options.elements.arc.total.value || 0;
+						var legendValue = window.myDoughnut.data.datasets[0].data[legendItem.index]
+						if (legendItem.hidden) {
+							value += legendValue;
+						} else {
+							value -= legendValue;
+						}
+
+						window.myDoughnut.config.options.elements.arc.total.value  = value;
+						// overwrite chart.js onClick functionality 
+						var index = legendItem.index;
+						var chart = window.myDoughnut;
+						var i, ilen, meta;
+
+						for (i = 0, ilen = (chart.data.datasets || []).length; i < ilen; ++i) {
+							meta = getDatasetMeta(chart, i);
+							// toggle visibility of index if exists
+							if (meta.data[index]) {
+								meta.data[index].hidden = !meta.data[index].hidden;
+							}
+						}
+						window.myDoughnut.update();
+					}
+				},
+				title: {
+					display: true,
+					text: 'Chart.js Doughnut Chart'
+				},
+				animation: {
+					animateScale: true,
+					animateRotate: true
+				}
+			}
+		};
+
+		window.onload = function () {
+			var ctx = document.getElementById('chart-area').getContext('2d');
+			window.myDoughnut = new Chart(ctx, config);
+		};
+
+		// document.getElementById('randomizeData').addEventListener('click', function() {
+		// 	config.data.datasets.forEach(function(dataset) {
+		// 		dataset.data = dataset.data.map(function() {
+		// 			return randomScalingFactor();
+		// 		});
+		// 	});
+
+		// 	window.myDoughnut.update();
+		// });
+
+		// var colorNames = Object.keys(window.chartColors);
+		// document.getElementById('addDataset').addEventListener('click', function() {
+		// 	var newDataset = {
+		// 		backgroundColor: [],
+		// 		data: [],
+		// 		label: 'New dataset ' + config.data.datasets.length,
+		// 	};
+
+		// 	for (var index = 0; index < config.data.labels.length; ++index) {
+		// 		newDataset.data.push(randomScalingFactor());
+
+		// 		var colorName = colorNames[index % colorNames.length];
+		// 		var newColor = window.chartColors[colorName];
+		// 		newDataset.backgroundColor.push(newColor);
+		// 	}
+
+		// 	config.data.datasets.push(newDataset);
+		// 	window.myDoughnut.update();
+		// });
+
+		// document.getElementById('addData').addEventListener('click', function() {
+		// 	if (config.data.datasets.length > 0) {
+		// 		config.data.labels.push('data #' + config.data.labels.length);
+
+		// 		var colorName = colorNames[config.data.datasets[0].data.length % colorNames.length];
+		// 		var newColor = window.chartColors[colorName];
+
+		// 		config.data.datasets.forEach(function(dataset) {
+		// 			dataset.data.push(randomScalingFactor());
+		// 			dataset.backgroundColor.push(newColor);
+		// 		});
+
+		// 		window.myDoughnut.update();
+		// 	}
+		// });
+
+		// document.getElementById('removeDataset').addEventListener('click', function() {
+		// 	config.data.datasets.splice(0, 1);
+		// 	window.myDoughnut.update();
+		// });
+
+		// document.getElementById('removeData').addEventListener('click', function() {
+		// 	config.data.labels.splice(-1, 1); // remove the label first
+
+		// 	config.data.datasets.forEach(function(dataset) {
+		// 		dataset.data.pop();
+		// 		dataset.backgroundColor.pop();
+		// 	});
+
+		// 	window.myDoughnut.update();
+		// });
+
+		// document.getElementById('changeCircleSize').addEventListener('click', function() {
+		// 	if (window.myDoughnut.options.circumference === Math.PI) {
+		// 		window.myDoughnut.options.circumference = 2 * Math.PI;
+		// 		window.myDoughnut.options.rotation = -Math.PI / 2;
+		// 	} else {
+		// 		window.myDoughnut.options.circumference = Math.PI;
+		// 		window.myDoughnut.options.rotation = -Math.PI;
+		// 	}
+
+		// 	window.myDoughnut.update();
+		// });
+
+	</script>
+</body>
+
+</html>

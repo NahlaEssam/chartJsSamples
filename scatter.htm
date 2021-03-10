@@ -1,0 +1,140 @@
+
+<!doctype html>
+<html>
+
+<head>
+	<title>Scatter Chart</title>
+    <script src="https://www.chartjs.org/dist/2.9.4/Chart.min.js"></script>
+    <script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+    <script src="./scatter.js"></script>
+	<style>
+	canvas {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	</style>
+</head>
+
+<body>
+	<div style="width:75%">
+		<canvas id="canvas"></canvas>
+	</div>
+	
+	<script>
+        var color = Chart.helpers.color;
+        var latest_x= 0;
+        var latest_y= 0;
+        
+		function generateData(percentage ) {
+            var data = [];
+            console.log('start')
+            var total = 0;
+			for (var i =  latest_x; i < percentage ; i++) {
+                for(var j = latest_y ; j < 10 ; j++){
+                    if(total < percentage){
+                        console.log(i , j)  
+                        data.push({
+                            x:  i ,
+                            y:  j 
+                        });
+                        latest_x = i;
+                        latest_y = 0;
+                        total++;
+                    } else{
+                        if(j< 9){
+                            latest_y = j ;
+                        } else {
+                            latest_y = 0 ;
+                        }
+                       
+                        break;
+                    }
+                }
+            }
+			return data;
+		}
+
+		var scatterChartData = {
+			datasets: [
+                {
+				label: 'My First dataset',
+				borderColor: window.chartColors.red,
+                backgroundColor: window.chartColors.red,
+				data: generateData(33 )
+            },
+             {
+				label: 'My Second dataset',
+				borderColor: window.chartColors.green,
+                backgroundColor: window.chartColors.green,
+				data: generateData(33 )
+            },
+            {
+				label: 'My Third dataset',
+				borderColor: window.chartColors.blue,
+                backgroundColor: window.chartColors.blue,
+				data: generateData(34 )
+            }
+        ]
+		};
+
+		window.onload = function() {
+            var ctx = document.getElementById('canvas').getContext('2d');
+            // window.myScatter = Chart.Scatter(ctx, {
+			window.myScatter = new Chart(ctx, {
+                type: 'iBubble',
+				data: scatterChartData,
+				options: {
+                    responsive: true,
+                    elements: {
+                        point:{
+                            radius: 15
+                        }
+                    }, 
+					title: {
+						display: false,
+						text: 'Chart.js Scatter Chart'
+                    },
+                    legend:{
+                        display: false
+                    },
+                    scales: {
+					xAxes: [{
+						type: 'linear',
+						ticks: {
+							autoSkip: false,
+							beginAtZero: true,
+							callback: function (value, index, values) {
+								return '';
+                            },	
+                            suggestedMax: 10
+						},
+						gridLines: {
+							display: false,
+						},
+					}],
+					yAxes: [{
+
+						ticks: {
+							beginAtZero: true,
+							callback: function (value, index, values) {
+								return '';
+                            },
+                            suggestedMax: 12
+						},
+						gridLines: {
+							drawBorder: false,
+							drawOnChartArea: false,
+							// display: false,
+						},
+					}]
+				},
+				
+				}
+			});
+		};
+
+	</script>
+</body>
+
+</html>
